@@ -7,10 +7,36 @@ import filter.ast.builder.AstBuilderVisitor;
 import filter.ast.builder.AstBuilders;
 import filter.ast.printer.AstPrinter;
 import net.jqwik.api.*;
+import org.junit.jupiter.api.Test;
 
 public class RoundtripPropertiesTest {
 
-  // TODO
+  // TODO : Formulieren Sie verschiedene Eigenschaften für die AST-Builder.Beispielsweise sollte ein "Roundtrip" für jeweils beide Builder (individuell, aber auch gegenseitig verschränkt) möglich sein: Query -> Parsing -> AST -> Pretty-Print -> Parsing -> AST. Sie könnten mit einer festen, selbstdefinierten Query starten oder als Parameter für einen Property-Test mit jqwik die in der Klasse filter.ast.RoundtripPropertiesTest vordefinierten Arbitraries nutzen: @Property boolean foo(@ForAll("simpleQueries") String query) {...}.Treffen Sie zusätzlich Annahmen über Expressions und Values, beispielsweise über die logischen Eigenschaften der AND-Verknüpfung.Implementieren Sie diese Property Tests in der Klasse filter.ast.RoundtripPropertiesTest.
+
+  @Property
+  boolean roundtripPattern(@ForAll("simpleQueries") String query) {
+    var ast1 = new AstBuilderPattern().translate(AstBuilders.parse(query));
+    String printed = AstPrinter.toString(ast1);
+    var ast2 = new AstBuilderPattern().translate(AstBuilders.parse(printed));
+    return ast1.equals(ast2);
+  }
+
+  @Property
+  boolean roundtripVisitor(@ForAll("simpleQueries") String query) {
+    var ast1 = new AstBuilderVisitor().translate(AstBuilders.parse(query));
+    String printed = AstPrinter.toString(ast1);
+    var ast2 = new AstBuilderVisitor().translate(AstBuilders.parse(printed));
+    return ast1.equals(ast2);
+  }
+
+  @Property
+  boolean crossRoundtrip(@ForAll("simpleQueries") String query) {
+    var ast1 = new AstBuilderPattern().translate(AstBuilders.parse(query));
+    String printed = AstPrinter.toString(ast1);
+    var ast2 = new AstBuilderVisitor().translate(AstBuilders.parse(printed));
+    return ast1.equals(ast2);
+  }
+  
 
   // ---------- @Provide-Methods for Arbitraries ----------
 
@@ -68,4 +94,5 @@ public class RoundtripPropertiesTest {
               return sb.toString();
             });
   }
+
 }
