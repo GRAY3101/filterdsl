@@ -1,0 +1,1 @@
+((artist == "Die Toten Hosen") and ((year >= 1996) or ((genre in ("rock", "punk rock")) and (not (album == "Ein kleines bisschen Horrorschau")))))
