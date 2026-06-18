@@ -10,11 +10,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-/** Code gibt Fehler:  Exception in thread "main" java.lang.NullPointerException
-        at java.base/java.util.Objects.requireNonNull(Objects.java:220)
-        at filter.ast.printer.AstPrinter.printExpr(AstPrinter.java:14)
-        at filter.ast.printer.AstPrinter.toString(AstPrinter.java:10)
-        at filter.Main.main(Main.java:25)*/
 
 public class AstBuilderVisitor extends FilterBaseVisitor<Void> {
 
